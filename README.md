@@ -1,124 +1,56 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Hệ thống quản lý nhân sự (HRM Web Application)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 1. Tổng quan
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Dự án Human Resource Management (HRM) Web Application mô phỏng một hệ thống quản lý nhân sự thực tế trong doanh nghiệp. Hệ thống yêu cầu tính toàn vẹn dữ liệu nghiêm ngặt, bảo mật nhiều lớp và quy trình quản lý chặt chẽ.
 
-## Description
+## 2. Chức năng chính
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Xác thực & Phân quyền:** Đăng ký, đăng nhập cấp phát token JWT, mã hóa mật khẩu Bcrypt và phân quyền RBAC (USER, MANAGER, HR_MANAGER, ADMIN).
+- **Quản lý nhân sự:** Thêm, sửa, đổi trạng thái làm việc của nhân viên, bảo vệ chống nhồi nhét dữ liệu (Mass Assignment).
+- **Duyệt phép 2 cấp (Dual-Approval):** Nhân viên nộp đơn; Quản lý trực tiếp phê duyệt cấp 1; HR Manager phê duyệt cấp 2.
+- **Tính lương tự động:** Khởi tạo bảng lương tự động tính toán tổng lương từ lương cơ bản, thưởng và các khoản khấu trừ.
+- **Nhật ký hệ thống (Audit Logs):** Tự động ghi lại lịch sử thay đổi dữ liệu bảng nhân sự và bảng lương bằng PostgreSQL Trigger.
 
-## Project setup
+## 3. Kiến trúc & Công nghệ
 
-```bash
-$ npm install
+- **Framework & Database:** NestJS (TypeScript), PostgreSQL (v15+), Prisma ORM.
+- **Bảo mật:** Passport.js, JWT, Bcrypt, Helmet, CORS, ValidationPipe.
+- **Môi trường:** Docker, Docker Compose.
+
+## 4. Cấu trúc thư mục dự kiến
+
+```text
+hrm-backend/
+├── docs/
+│   └── task-breakdown.md      # Chi tiết phân công công việc
+├── src/
+│   ├── main.ts
+│   ├── app.module.ts
+│   ├── common/                # Chứa Guard, Interceptor, Pipe, Filter dùng chung
+│   ├── modules/
+│   │   ├── auth/              # Xử lý xác thực
+│   │   ├── users/             # Quản lý nhân sự
+│   │   ├── leaves/            # Quản lý nghỉ phép
+│   │   └── payrolls/          # Quản lý tiền lương
+│   └── prisma/
+│       └── schema.prisma      # Định nghĩa các bảng Database
+├── docker-compose.yml
+├── .env
+└── README.md
 ```
 
-## Compile and run the project
+## 5. Phân công nhiệm vụ
 
-```bash
-# development
-$ npm run start
+| Vai trò              | Phụ trách           | Nhiệm vụ chính                                                                                                                                                            |
+| -------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cấu trúc & Bảo mật   | Nhật Minh           | Thiết lập base project, Docker, Cấu hình Prisma. Xây dựng `JwtAuthGuard`, `RolesGuard`, Custom Exception Filter, Interceptor, `ValidationPipe`. Code Module Auth & Users. |
+| Phát triển Nghiệp vụ | [Tên bạn cùng nhóm] | Thiết kế Schema Prisma cho Leave, Payroll, Audit. Phát triển Module Leave (Duyệt phép 2 cấp), Module Payroll (Tính lương tự động). Viết PL/pgSQL Trigger.                 |
 
-# watch mode
-$ npm run start:dev
+Xem chi tiết các đầu việc cụ thể tại docs/task-breakdown.md.
 
-# production mode
-$ npm run start:prod
-```
+## 6. Git workflow
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Observability
-
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
-
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
-
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
-
-To add it to this project:
-
-```bash
-$ npm install @nestjs/observe
-```
-
-Then follow the [setup guide](https://docs.nestjs.com/observability/overview) - it takes a single import and an app key.
-
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Clone dự án và tạo nhánh mới từ nhánh chính để làm việc: `git checkout -b feature/[tên-tính-năng]`.
+- Commit convention: `feat:` (thêm tính năng), `fix:` (sửa lỗi), `refactor:` (tối ưu code), `docs:` (viết tài liệu).
+- Mọi nhánh tính năng sau khi hoàn thành cần tạo Pull Request (PR) để review và test qua API Dog trước khi merge.
