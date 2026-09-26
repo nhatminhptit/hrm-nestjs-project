@@ -5,9 +5,10 @@ import { AuthModule } from './modules/auth/auth.module.js';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
+import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, UsersModule],
   controllers: [AppController],
   providers: [
     AppService,
