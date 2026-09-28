@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { LeaveStatus, Role } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service.js';
+import { PrismaService } from '../../prisma/prisma.service.js';
 import { CreateLeaveRequestDto } from './dto/leave-requests.dto.js';
 
 @Injectable()

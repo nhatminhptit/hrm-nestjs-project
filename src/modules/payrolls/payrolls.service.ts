@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Status, LeaveStatus, Role } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service.js';
+import { PrismaService } from '../../prisma/prisma.service.js';
 import { ProcessPayrollDto } from './dto/payrolls.dto.js';
 
 const DAY = 86_400_000;
