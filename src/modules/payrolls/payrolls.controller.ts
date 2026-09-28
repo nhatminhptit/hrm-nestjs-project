@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ProcessPayrollDto } from './dto/payrolls.dto.js';
 import { PayrollsService } from './payrolls.service.js';
-import { CurrentUser } from '../common/decorators/current-user.decorator.js';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { Role } from '@prisma/client';
 
 @Controller('payrolls')

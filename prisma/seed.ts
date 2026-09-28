@@ -15,61 +15,61 @@ async function main() {
     update: {},
     create: {
       title: 'Software Engineer',
-      salaryRangeMin: 15000000,
-      salaryRangeMax: 30000000,
+      salary_range_min: 15000000,
+      salary_range_max: 30000000,
     },
   });
   const manager = await prisma.employee.upsert({
     where: { email: 'manager@test.local' },
     update: {
       role: Role.MANAGER,
-      departmentId: department.id,
-      jobTitleId: title.id,
+      department_id: department.id,
+      job_title_id: title.id,
     },
     create: {
-      firstName: 'Mai',
-      lastName: 'Manager',
+      first_name: 'Mai',
+      last_name: 'Manager',
       email: 'manager@test.local',
       password: 'TEST_ONLY',
       role: Role.MANAGER,
-      departmentId: department.id,
-      jobTitleId: title.id,
+      department_id: department.id,
+      job_title_id: title.id,
     },
   });
   const employee = await prisma.employee.upsert({
     where: { email: 'employee@test.local' },
     update: {
       role: Role.USER,
-      managerId: manager.id,
-      departmentId: department.id,
-      jobTitleId: title.id,
+      manager_id: manager.id,
+      department_id: department.id,
+      job_title_id: title.id,
     },
     create: {
-      firstName: 'An',
-      lastName: 'Employee',
+      first_name: 'An',
+      last_name: 'Employee',
       email: 'employee@test.local',
       password: 'TEST_ONLY',
       role: Role.USER,
-      managerId: manager.id,
-      departmentId: department.id,
-      jobTitleId: title.id,
+      manager_id: manager.id,
+      department_id: department.id,
+      job_title_id: title.id,
     },
   });
   const hr = await prisma.employee.upsert({
     where: { email: 'hr@test.local' },
     update: {
       role: Role.HR_MANAGER,
-      departmentId: department.id,
-      jobTitleId: title.id,
+      department_id: department.id,
+      job_title_id: title.id,
     },
     create: {
-      firstName: 'Hoa',
-      lastName: 'HR',
+      first_name: 'Hoa',
+      last_name: 'HR',
       email: 'hr@test.local',
       password: 'TEST_ONLY',
       role: Role.HR_MANAGER,
-      departmentId: department.id,
-      jobTitleId: title.id,
+      department_id: department.id,
+      job_title_id: title.id,
     },
   });
   console.log({ employee: employee.id, manager: manager.id, hr: hr.id });
